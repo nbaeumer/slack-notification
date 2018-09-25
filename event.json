@@ -1,0 +1,20 @@
+{
+  "Records": [{
+    "EventSource": "aws:sns",
+    "EventVersion": "1.0",
+    "EventSubscriptionArn": "arn:aws:sns:eu-west-1:123456789012:AdministrationNotification:a0438963-ab54-45f0-8fd6-a47ebc8081a4",
+    "Sns": {
+      "Type": "Notification",
+      "MessageId": "4bd0aad6-5d48-5f6e-970f-fec22ced86cd",
+      "TopicArn": "arn:aws:sns:eu-west-1:123456789012:AdministrationNotification",
+      "Subject": "ALARM: \"test-app-error\" in EU (Ireland)",
+      "Message": "{\"AlarmName\":\"test-app-error\",\"AlarmDescription\":null,\"AWSAccountId\":\"123456789012\",\"NewStateValue\":\"ALARM\",\"NewStateReason\":\"Threshold Crossed: 1 out of the last 1 datapoints [1.0 (13/09/18 13:58:00)] was greater than the threshold (0.0) (minimum 1 datapoint for OK -> ALARM transition).\",\"StateChangeTime\":\"2018-09-13T14:08:37.895+0000\",\"Region\":\"EU (Ireland)\",\"OldStateValue\":\"OK\",\"Trigger\":{\"MetricName\":\"test-app--metric\",\"Namespace\":\"test-app\",\"StatisticType\":\"Statistic\",\"Statistic\":\"MINIMUM\",\"Unit\":null,\"Dimensions\":[],\"Period\":300,\"EvaluationPeriods\":1,\"ComparisonOperator\":\"GreaterThanThreshold\",\"Threshold\":0.0,\"TreatMissingData\":\"- TreatMissingData:                    NonBreaching\",\"EvaluateLowSampleCountPercentile\":\"\"}}",
+      "Timestamp": "2018-09-23T14:08:37.934Z",
+      "SignatureVersion": "1",
+      "Signature": "tSZACm0tW2BfS6ny85UrAxjtSm0NlrVVGU2DgCZFJu6jPSnCzCCwx5Vr86oUbnwNuMYMscuNvtKho8Rodsxs3HWwAsJKnfcR/z71XvBKdEW+byAwcj5PO1DfJ/f3KtWMqj5uAAcwFtZTPOh1c17LbE17Cfypi5JeSmOdmRnJZr4JueAtO1mIqimD5Qb3WndNZp+5SvTbysj+QgJBNHYpSb+X967+uKQwdPWJfOptf0icHdLxeecAgeV9KsZeGDA8xNPMQDp96tD4TLd6S+R8EVIs3oe3boxUCWWO6aMbEmuBbKCowWF11TMDdppplzJxHTXJESYWgN5PE8pZ5uVV2A==",
+      "SigningCertUrl": "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-ad565b8b1a6c5d002d285f9598aa1d9b.pem",
+      "UnsubscribeUrl": "https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:123456789012:AdministrationNotification:a0438963-ab54-45f0-8fd6-a47ebc8081a4",
+      "MessageAttributes": {}
+    }
+  }]
+}

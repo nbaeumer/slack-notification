@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Slack Notification App
+
+Parameters:
+  SnsTopicDisplayName:
+    Type: String
+    Description: The Name of the SNS Topic
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: AdministrationNotification
+  SlackHookURL:
+    Type: String
+    Description: The URL part of the Slack Webhook after 'https://hooks.slack.com/services/'
+  LogGroup:
+    Type: String
+    Description: The Amazon CloudWatch Logs LogGroup
+  KmsKeyId:
+    Type: String
+    Description: The ID of the KMS Key
+
+Resources:
+  SlackNotificationFunction:
+    Description: Lambda Function for sending Slack Notifications
+    DependsOn: [SlackNotificationRole]
+    Type: AWS::Serverless::Function
+    FunctionName: ng-docs-slack-notification
+    Properties:
+      CodeUri: dist
+      Handler: slack-notification
+      Runtime: go1.x
+      Role: !GetAtt SlackNotificationRole.Arn
+      KmsKeyArn: !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${KmsKeyId}
+      Timeout: 5
+      Environment:
+        Variables:
+          SLACK_WEBHOOK: !Sub ${SlackHookURL}
+          LOG_GROUP: !Sub ${LogGroup}
+      Events:
+        ReviewCreatedTopic:
+          Type: SNS
+          Properties:
+            Topic: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${SnsTopicDisplayName}
+
+  SlackNotificationRole:
+    Description: Creating service role in IAM
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ng-docs-lambda-slack-notification-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+                - "sts:AssumeRole"
+      Path: /
+
+  SlackNotificationPolcy:
+    Description: Setting IAM policy for the service role for AWS CodeBuild
+    DependsOn: [SlackNotificationRole]
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ng-docs-lambda-slack-notification-policy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: Allow
+          Action: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+          Resource: ["*"]
+      Roles: [!Ref SlackNotificationRole]
+
+Outputs:
+  LambdaFunctionArn:
+    Description: "Arn of the Lambda Function"
+    Value: !GetAtt SlackNotificationFunction.Arn
+  RoleArn:
+    Description: "Arn of the IAM Role"
+    Value: !GetAtt SlackNotificationRole.Arn
